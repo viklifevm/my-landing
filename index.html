@@ -527,6 +527,131 @@
   .reveal-delay-3 { transition-delay: 0.3s; }
   .reveal-delay-4 { transition-delay: 0.4s; }
 
+  /* ===== WOW EFFECTS ===== */
+
+  /* Animated gradient on hero H1 */
+  @keyframes gradientShift {
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+  .hero-h1 span {
+    background: linear-gradient(135deg, #a78bfa, #60a5fa, #f0abfc, #a78bfa) !important;
+    background-size: 300% 300% !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    animation: gradientShift 5s ease infinite;
+  }
+
+  /* Shimmer on primary buttons */
+  .btn-primary { position: relative; overflow: hidden; }
+  .btn-primary::after {
+    content: ''; position: absolute; top: 0; left: -100%;
+    width: 60%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.18), transparent);
+    transform: skewX(-20deg);
+    transition: left 0.6s ease;
+  }
+  .btn-primary:hover::after { left: 150%; }
+
+  /* Float animation for hero badge */
+  @keyframes floatBadge {
+    0%, 100% { transform: translateY(0px); }
+    50%       { transform: translateY(-8px); }
+  }
+  .hero-badge { animation: floatBadge 3.5s ease-in-out infinite; }
+
+  /* Glow pulse on featured pricing card */
+  @keyframes cardGlow {
+    0%, 100% { box-shadow: 0 0 30px rgba(167,139,250,0.15), 0 0 0 1px rgba(167,139,250,0.35); }
+    50%       { box-shadow: 0 0 60px rgba(167,139,250,0.35), 0 0 0 1px rgba(167,139,250,0.6), 0 0 100px rgba(96,165,250,0.1); }
+  }
+  .price-card.featured { animation: cardGlow 3s ease-in-out infinite; }
+
+  /* Animated gradient section tag */
+  @keyframes tagPulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(167,139,250,0); }
+    50%       { box-shadow: 0 0 0 4px rgba(167,139,250,0.1); }
+  }
+  .section-tag { animation: tagPulse 3s ease-in-out infinite; }
+
+  /* 3D tilt — CSS perspective */
+  .service-card, .case-card, .testi-card {
+    transform-style: preserve-3d;
+    will-change: transform;
+  }
+
+  /* Cursor spotlight */
+  body::before {
+    content: '';
+    position: fixed;
+    width: 600px; height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(167,139,250,0.04) 0%, transparent 70%);
+    left: var(--cursor-x, -300px);
+    top: var(--cursor-y, -300px);
+    transform: translate(-50%, -50%);
+    pointer-events: none; z-index: 0;
+    transition: left 0.12s ease, top 0.12s ease;
+  }
+
+  /* Enhanced reveal variants */
+  .reveal-left  { opacity: 0; transform: translateX(-32px); }
+  .reveal-right { opacity: 0; transform: translateX(32px); }
+  .reveal-scale { opacity: 0; transform: scale(0.92); }
+  .reveal-left.visible, .reveal-right.visible, .reveal-scale.visible {
+    opacity: 1; transform: none;
+    transition: opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1);
+  }
+
+  /* Stat counter glow */
+  .stat-num { text-shadow: 0 0 20px rgba(167,139,250,0.4); }
+
+  /* Nav logo animated underline */
+  .nav-logo { position: relative; }
+  .nav-logo::after {
+    content: ''; position: absolute; bottom: -3px; left: 0;
+    width: 0; height: 1px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    transition: width 0.4s ease;
+  }
+  .nav-logo:hover::after { width: 100%; }
+
+  /* Process line draw animation */
+  .process-list::before {
+    animation: lineGrow 2s ease forwards;
+    transform-origin: top;
+  }
+  @keyframes lineGrow {
+    from { transform: scaleY(0); }
+    to   { transform: scaleY(1); }
+  }
+
+  /* Hero stats divider */
+  .hero-stats { border-top: 1px solid var(--border); padding-top: 32px; }
+
+  /* Service card gradient border on hover */
+  .service-card:hover {
+    background: linear-gradient(var(--bg2), var(--bg2)) padding-box,
+                linear-gradient(135deg, rgba(167,139,250,0.5), rgba(96,165,250,0.3)) border-box;
+    border-color: transparent !important;
+  }
+
+  /* Testimonial card quote mark */
+  .testi-card { position: relative; }
+  .testi-card::before {
+    content: '"';
+    position: absolute; top: 12px; right: 20px;
+    font-size: 5rem; line-height: 1; color: rgba(167,139,250,0.06);
+    font-family: Georgia, serif; pointer-events: none;
+  }
+
+  /* Staggered grid children */
+  .services-grid .service-card:nth-child(1) { transition-delay: 0s; }
+  .services-grid .service-card:nth-child(2) { transition-delay: 0.1s; }
+  .services-grid .service-card:nth-child(3) { transition-delay: 0.2s; }
+  .services-grid .service-card:nth-child(4) { transition-delay: 0.3s; }
+
   /* ===== RESPONSIVE ===== */
   @media (max-width: 1024px) {
     .hero-inner { grid-template-columns: 1fr; }
@@ -1336,6 +1461,106 @@
       a.style.color = a.getAttribute('href') === '#' + current ? 'var(--text)' : '';
     });
   });
+
+  /* ===== CURSOR SPOTLIGHT ===== */
+  document.addEventListener('mousemove', (e) => {
+    document.body.style.setProperty('--cursor-x', e.clientX + 'px');
+    document.body.style.setProperty('--cursor-y', e.clientY + 'px');
+  });
+
+  /* ===== PARALLAX HERO ===== */
+  const heroCanvas = document.getElementById('particles');
+  const heroSection = document.getElementById('hero');
+  window.addEventListener('scroll', () => {
+    const sy = window.scrollY;
+    if (sy < window.innerHeight * 1.2 && heroCanvas) {
+      heroCanvas.style.transform = `translateY(${sy * 0.35}px)`;
+    }
+  }, { passive: true });
+
+  /* ===== 3D TILT ON CARDS ===== */
+  document.querySelectorAll('.service-card, .case-card').forEach(card => {
+    card.addEventListener('mousemove', (e) => {
+      const rect = card.getBoundingClientRect();
+      const x = (e.clientX - rect.left) / rect.width  - 0.5;
+      const y = (e.clientY - rect.top)  / rect.height - 0.5;
+      card.style.transform = `translateY(-6px) perspective(600px) rotateX(${-y * 7}deg) rotateY(${x * 7}deg)`;
+    });
+    card.addEventListener('mouseleave', () => {
+      card.style.transition = 'transform 0.5s cubic-bezier(0.16,1,0.3,1), border-color 0.3s, box-shadow 0.3s';
+      card.style.transform = '';
+      setTimeout(() => { card.style.transition = ''; }, 500);
+    });
+  });
+
+  /* ===== MAGNETIC BUTTONS ===== */
+  document.querySelectorAll('.btn-primary').forEach(btn => {
+    btn.addEventListener('mousemove', (e) => {
+      const rect = btn.getBoundingClientRect();
+      const x = (e.clientX - rect.left - rect.width  / 2) * 0.25;
+      const y = (e.clientY - rect.top  - rect.height / 2) * 0.25;
+      btn.style.transform = `translateY(-2px) translate(${x}px, ${y}px)`;
+    });
+    btn.addEventListener('mouseleave', () => {
+      btn.style.transform = '';
+    });
+  });
+
+  /* ===== CUSTOM SMOOTH SCROLL (with nav offset) ===== */
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', (e) => {
+      const target = document.querySelector(a.getAttribute('href'));
+      if (!target) return;
+      e.preventDefault();
+      const offset = 72;
+      const top = target.getBoundingClientRect().top + window.scrollY - offset;
+      window.scrollTo({ top, behavior: 'smooth' });
+    });
+  });
+
+  /* ===== STAGGER REVEAL FOR GRID CHILDREN ===== */
+  (function() {
+    const grids = [
+      { sel: '.services-grid .service-card', delay: 120 },
+      { sel: '.cases-grid .case-card',       delay: 90  },
+      { sel: '.testi-grid .testi-card',      delay: 130 },
+      { sel: '.pricing-grid .price-card',    delay: 150 },
+    ];
+    grids.forEach(({ sel, delay }) => {
+      const items = document.querySelectorAll(sel);
+      const obs = new IntersectionObserver((entries) => {
+        let i = 0;
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            setTimeout(() => {
+              e.target.classList.add('visible');
+            }, i * delay);
+            i++;
+            obs.unobserve(e.target);
+          }
+        });
+      }, { threshold: 0.1 });
+      items.forEach(el => { el.classList.add('reveal'); obs.observe(el); });
+    });
+  })();
+
+  /* ===== TYPING EFFECT ON HERO EYEBROW ===== */
+  (function() {
+    const el = document.querySelector('.hero-eyebrow');
+    if (!el) return;
+    const text = el.textContent;
+    el.textContent = '';
+    el.style.opacity = '1';
+    el.style.transform = 'none';
+    let i = 0;
+    const type = () => {
+      if (i < text.length) {
+        el.textContent += text[i++];
+        setTimeout(type, 38);
+      }
+    };
+    setTimeout(type, 400);
+  })();
 </script>
 </body>
 </html>
