@@ -8,6 +8,7 @@
 <style>
   /* ===== RESET & BASE ===== */
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  a, button { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
   :root {
     --bg:        #0a0a0f;
     --bg2:       #111118;
@@ -85,12 +86,19 @@
   .nav-links a:hover { color: var(--text); }
   .nav-links a:hover::after { transform: scaleX(1); }
   .btn-nav {
-    background: var(--accent); color: #fff;
-    padding: 8px 20px; border-radius: 8px; font-size: 0.875rem; font-weight: 600;
-    transition: all 0.2s;
-    box-shadow: 0 0 16px rgba(167,139,250,0.3);
+    background: linear-gradient(135deg, #a78bfa, #7c3aed);
+    color: #fff !important;
+    -webkit-text-fill-color: #fff !important;
+    padding: 9px 22px; border-radius: 8px; font-size: 0.9rem; font-weight: 700;
+    transition: all 0.25s;
+    box-shadow: 0 0 22px rgba(167,139,250,0.45), 0 2px 8px rgba(124,58,237,0.3);
+    border: 1px solid rgba(167,139,250,0.4);
   }
-  .btn-nav:hover { filter: brightness(1.1); transform: translateY(-1px); }
+  .btn-nav:hover {
+    filter: brightness(1.15);
+    transform: translateY(-2px);
+    box-shadow: 0 0 32px rgba(167,139,250,0.65), 0 4px 12px rgba(124,58,237,0.4);
+  }
 
   /* burger */
   .burger { display: none; flex-direction: column; gap: 5px; padding: 4px; cursor: pointer; }
@@ -100,15 +108,27 @@
   .burger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
   .mobile-menu {
-    display: none; position: fixed; top: 64px; left: 0; right: 0;
-    background: rgba(10,10,15,0.96); backdrop-filter: blur(14px);
+    position: fixed; top: 64px; left: 0; right: 0;
+    background: rgba(10,10,15,0.97); backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
     border-bottom: 1px solid var(--border);
     padding: 24px var(--px); z-index: 890;
-    flex-direction: column; gap: 20px;
+    display: flex; flex-direction: column; gap: 20px;
+    opacity: 0; transform: translateY(-10px);
+    pointer-events: none;
+    transition: opacity 0.25s ease, transform 0.25s ease;
   }
-  .mobile-menu.open { display: flex; }
-  .mobile-menu a { color: var(--text2); font-size: 1rem; padding: 4px 0; }
-  .mobile-menu a:hover { color: var(--text); }
+  .mobile-menu.open {
+    opacity: 1; transform: translateY(0);
+    pointer-events: auto;
+  }
+  .mobile-menu a {
+    color: var(--text2); font-size: 1.05rem; padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+    transition: color 0.2s;
+  }
+  .mobile-menu a:last-child { border-bottom: none; }
+  .mobile-menu a:hover, .mobile-menu a:active { color: var(--text); }
 
   /* ===== CANVAS ===== */
   #particles { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
@@ -204,13 +224,6 @@
     content: ''; position: absolute; inset: 0;
     background: linear-gradient(to bottom, transparent 60%, rgba(10,10,15,0.6));
   }
-  .photo-placeholder {
-    width: 100%; height: 100%; background: linear-gradient(135deg, #1a1a2e 0%, #2d1b4e 50%, #1a2040 100%);
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    gap: 12px;
-  }
-  .photo-placeholder svg { opacity: 0.3; }
-  .photo-placeholder span { color: var(--text3); font-size: 0.85rem; }
   .hero-badge {
     position: absolute; bottom: -16px; left: -20px;
     background: var(--bg3); border: 1px solid var(--border);
@@ -444,11 +457,6 @@
     box-shadow: 0 0 0 3px rgba(167,139,250,0.15);
   }
   .form-group textarea { height: 110px; }
-  .form-success {
-    display: none; text-align: center; padding: 24px;
-    background: rgba(52,211,153,0.1); border: 1px solid rgba(52,211,153,0.3);
-    border-radius: var(--radius); color: var(--success);
-  }
   .cta-or { text-align: center; margin: 20px 0; color: var(--text3); font-size: 0.9rem; }
   .btn-tg {
     width: 100%; display: flex; align-items: center; justify-content: center; gap: 10px;
@@ -681,6 +689,56 @@
     .hero-btns { flex-direction: column; }
     .hero-btns .btn { width: 100%; justify-content: center; }
   }
+
+  /* ===== BACK TO TOP ===== */
+  #back-to-top {
+    position: fixed; bottom: 90px; right: 28px; z-index: 799;
+    width: 44px; height: 44px; border-radius: 50%;
+    background: var(--bg3); border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; transition: opacity 0.3s, transform 0.3s, background 0.2s, box-shadow 0.2s;
+    opacity: 0; transform: translateY(16px) scale(0.85);
+    pointer-events: none;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+  }
+  #back-to-top.visible {
+    opacity: 1; transform: translateY(0) scale(1);
+    pointer-events: auto;
+  }
+  #back-to-top:hover {
+    background: var(--accent); border-color: var(--accent);
+    box-shadow: 0 0 20px rgba(167,139,250,0.45);
+    transform: translateY(-3px) scale(1.08);
+  }
+  #back-to-top svg { width: 18px; height: 18px; stroke: var(--text2); transition: stroke 0.2s; }
+  #back-to-top:hover svg { stroke: #fff; }
+
+  /* ===== FORM SUCCESS ANIMATION ===== */
+  @keyframes successPop {
+    0%   { opacity: 0; transform: scale(0.78) translateY(14px); }
+    65%  { transform: scale(1.04) translateY(-3px); }
+    100% { opacity: 1; transform: scale(1) translateY(0); }
+  }
+  @keyframes checkDraw {
+    from { stroke-dashoffset: 36; }
+    to   { stroke-dashoffset: 0; }
+  }
+  .form-success { display: none; text-align: center; padding: 32px 24px; }
+  .form-success.show {
+    display: block;
+    animation: successPop 0.55s cubic-bezier(0.16,1,0.3,1) forwards;
+  }
+  .success-icon-wrap {
+    width: 64px; height: 64px; border-radius: 50%; margin: 0 auto 20px;
+    background: rgba(52,211,153,0.12); border: 2px solid var(--success);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .success-icon-wrap svg polyline {
+    stroke-dasharray: 36; stroke-dashoffset: 36;
+    animation: checkDraw 0.45s 0.3s ease forwards;
+  }
+  .success-title { font-size: 1.15rem; font-weight: 700; margin-bottom: 8px; color: var(--text); }
+  .success-msg   { font-size: 0.9rem; color: var(--text2); line-height: 1.6; }
 </style>
 </head>
 <body>
@@ -728,13 +786,7 @@
     </div>
     <div class="hero-photo">
       <div class="hero-photo-inner">
-        <div class="photo-placeholder">
-          <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1">
-            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-            <circle cx="12" cy="7" r="4"/>
-          </svg>
-          <span>Ваше фото</span>
-        </div>
+        <img src="photo.jpg.png" alt="Виктория Музыченко" style="width:100%;height:100%;object-fit:cover;object-position:center top;display:block;">
       </div>
       <div class="hero-badge">
         <div class="badge-dot"></div>
@@ -1182,12 +1234,18 @@
         <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;">Отправить →</button>
       </form>
       <div class="form-success" id="form-success">
-        ✅ Получила! Напишу вам в течение 2 часов.
+        <div class="success-icon-wrap">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+        </div>
+        <div class="success-title">Отправлено!</div>
+        <div class="success-msg">Получила вашу заявку.<br>Напишу в течение 2 часов.</div>
       </div>
       <div class="cta-or">— или —</div>
       <a href="https://t.me/VMuzychenko8" target="_blank" rel="noopener" class="btn-tg">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L7.19 13.636l-2.96-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.958.923z"/></svg>
-        Написать в Telegram @VMuzychenko8
+        Написать в Telegram
       </a>
     </div>
     <div class="cta-benefits reveal reveal-delay-2">
@@ -1273,6 +1331,13 @@
     <span>Принимаю проекты с мая 2026</span>
   </div>
 </footer>
+
+<!-- BACK TO TOP -->
+<button id="back-to-top" title="Наверх" aria-label="Наверх">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="18 15 12 9 6 15"/>
+  </svg>
+</button>
 
 <!-- TELEGRAM FLOAT -->
 <a href="https://t.me/VMuzychenko8" target="_blank" rel="noopener" id="tg-float" title="Написать в Telegram @VMuzychenko8">
@@ -1367,10 +1432,27 @@
   /* ===== FORM SUBMIT ===== */
   document.getElementById('contact-form').addEventListener('submit', (e) => {
     e.preventDefault();
-    e.target.style.display = 'none';
-    document.getElementById('form-success').style.display = 'block';
-    document.querySelector('.cta-or').style.display = 'none';
-    document.querySelector('a.btn-tg').style.display = 'none';
+    const form = e.target;
+    const btn = form.querySelector('button[type="submit"]');
+    btn.textContent = 'Отправляю…';
+    btn.disabled = true;
+    btn.style.opacity = '0.7';
+    setTimeout(() => {
+      form.style.display = 'none';
+      const successEl = document.getElementById('form-success');
+      successEl.classList.add('show');
+      document.querySelector('.cta-or').style.display = 'none';
+      document.querySelector('a.btn-tg').style.display = 'none';
+    }, 800);
+  });
+
+  /* ===== BACK TO TOP ===== */
+  const backToTop = document.getElementById('back-to-top');
+  window.addEventListener('scroll', () => {
+    backToTop.classList.toggle('visible', window.scrollY > 400);
+  }, { passive: true });
+  backToTop.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   });
 
   /* ===== PARTICLES CANVAS ===== */
