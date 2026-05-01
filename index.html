@@ -1310,8 +1310,8 @@
             <polyline points="20 6 9 17 4 12"/>
           </svg>
         </div>
-        <div class="success-title">Заявка получена!</div>
-        <div class="success-msg">Свяжусь в течение 1 часа.</div>
+        <div class="success-title">Чат открыт в Telegram</div>
+        <div class="success-msg">Если новая вкладка не открылась — <a href="https://t.me/founder_code_bot" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:underline;">нажмите здесь</a>.</div>
       </div>
       <div class="cta-or">— или напишите напрямую —</div>
       <a href="https://t.me/VMuzychenko8" target="_blank" rel="noopener" class="btn-tg">
@@ -1479,20 +1479,35 @@
   }, { threshold: 0.5 });
   document.querySelectorAll('[data-target]').forEach(el => counterObs.observe(el));
 
-  /* ===== FORM SUBMIT ===== */
+  /* ===== FORM SUBMIT → Telegram bot ===== */
+  const BOT_USERNAME = 'founder_code_bot';
   document.getElementById('contact-form').addEventListener('submit', (e) => {
     e.preventDefault();
     const form = e.target;
+    const inputs = form.querySelectorAll('input, textarea');
+    const name = (inputs[0].value || '').trim();
+    const contact = (inputs[1].value || '').trim();
+    const desc = (inputs[2].value || '').trim();
+
+    try { localStorage.setItem('founder_lead_desc', desc); } catch (_) {}
+
+    const raw = `${name}|${contact}`;
+    const b64 = btoa(unescape(encodeURIComponent(raw)))
+      .replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '')
+      .slice(0, 64);
+
     const btn = form.querySelector('button[type="submit"]');
-    btn.textContent = 'Отправляю…';
+    btn.textContent = 'Открываю чат…';
     btn.disabled = true;
     btn.style.opacity = '0.7';
+
     setTimeout(() => {
       form.style.display = 'none';
       document.getElementById('form-success').classList.add('show');
       document.querySelector('.cta-or').style.display = 'none';
       document.querySelector('a.btn-tg').style.display = 'none';
-    }, 800);
+      window.open(`https://t.me/${BOT_USERNAME}?start=${b64}`, '_blank', 'noopener');
+    }, 400);
   });
 
   /* ===== STAGGER REVEAL FOR GRID ===== */
